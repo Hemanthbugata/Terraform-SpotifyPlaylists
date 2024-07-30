@@ -30,8 +30,9 @@ Once Spotify creates the application, find and click the green Edit Settings but
 
 Copy the URI below into the Redirect URI field and click Add so that Spotify can find its authorization application locally on port 27228 at the correct path. Scroll to the bottom of the form and click Save.
 
+```bash
 http://localhost:27228/spotify_callback
-
+```
 Updated Redirect URI for Spotify application
 
 Run authorization server
@@ -41,14 +42,15 @@ Diagram of the authorization flow through the Spotify authorization
 proxy
 
 Return to your terminal and set the redirect URI as an environment variable, instructing the authorization proxy server to serve your Spotify access tokens on port 27228.
-
+```bash
 $ export SPOTIFY_CLIENT_REDIRECT_URI=http://localhost:27228/spotify_callback
-
+```
 Next, create a file called .env with the following contents to store your Spotify application's client ID and secret.
 
+```bash
 SPOTIFY_CLIENT_ID=
 SPOTIFY_CLIENT_SECRET=
-
+```
 Copy the Client ID from the Spotify app page underneath your app's title and description, and paste it into .env as your SPOTIFY_CLIENT_ID.
 
 Spotify Developer portal app page with the client ID and secret
@@ -57,6 +59,7 @@ Click Show client secret and copy the value displayed into .env as your SPOTIFY_
 
 Make sure Docker Desktop is running, and start the server. It will run in your terminal's foreground.
 
+```bash
 $ docker run --rm -it -p 27228:27228 --env-file ./.env ghcr.io/conradludgate/spotify-auth-proxy
 Unable to find image 'ghcr.io/conradludgate/spotify-auth-proxy:latest' locally
 latest: Pulling from conradludgate/spotify-auth-proxy
@@ -67,27 +70,19 @@ Status: Downloaded newer image for ghcr.io/conradludgate/spotify-auth-proxy:late
 APIKey: xxxxxx...
 Token:  xxxxxx...
 Auth:   http://localhost:27228/authorize?token=xxxxxx...
-
+```
 Visit the authorization server's URL by visiting the link that your terminal output lists after Auth:.
 
 The server will redirect you to Spotify to authenticate. After authenticating, the server will display Authorization successful, indicating that the Terraform provider can use the server to retrieve access tokens.
 
 Leave the server running.
 
-Clone example repository
-Clone the example Terraform configuration for this tutorial. It contains a complete Terraform configuration that searches for songs by Dolly Parton, and creates a playlist out of them.
-
-$ git clone https://github.com/hashicorp/learn-terraform-spotify.git
-
-Change into the directory.
-
-$ cd learn-terraform-spotify
-
 Explore the configuration
 Open main.tf. This file contains the Terraform configuration that searches Spotify and creates the playlist. The first two configuration blocks in the file:
 
 configure Terraform itself and specify the community provider that Terraform uses to communicate with Spotify.
 configure the Spotify provider with the key you set as a variable.
+```bash
 terraform {
   required_providers {
     spotify = {
@@ -96,21 +91,16 @@ terraform {
     }
   }
 }
-
+```
+```bash
 provider "spotify" {
   api_key = var.spotify_api_key
 }
+```
 
-The next block defines a Terraform data source to search the Spotify provider for Dolly Parton songs.
-
-data "spotify_search_track" "by_artist" {
-  artists = ["Dolly Parton"]
-  #  album = "Jolene"
-  #  name  = "Early Morning Breeze"
-}
 
 The next block uses a Terraform resource to create a playlist from the first three songs that match the search in the data source block.
-
+```bash
 resource "spotify_playlist" "playlist" {
   name        = "Terraform Summer Playlist"
   description = "This playlist was created by Terraform"
@@ -129,6 +119,7 @@ output "playlist_url" {
   value       = "https://open.spotify.com/playlist/${spotify_playlist.playlist.id}"
   description = "Visit this URL in your browser to listen to the playlist"
 }
+```
 
 Set the API key
 Rename the terraform.tfvars.example file terraform.tfvars so that Terraform can detect the file.
@@ -148,15 +139,16 @@ Open terraform.tfvars, and replace ... with the key from the proxy, so that Terr
 spotify_api_key = "..."
 
 This variable is declared for you in variables.tf.
-
+```bash
 variable "spotify_api_key" {
   type        = string
   description = "Set this as the APIKey that the authorization proxy server outputs"
 }
-
+```
 Install the Spotify provider
 In your terminal, initialize Terraform, which will install the Spotify provider.
 
+```bash
 $ terraform init
 
 Initializing the backend...
@@ -187,7 +179,9 @@ commands will detect it and remind you to do so if necessary.
 
 Create the playlist
 Now you are ready to create your playlist. Apply your Terraform configuration. Terraform will show you the changes it plans to make and prompt for your approval.
+```
 
+```bash
 $ terraform apply
 
 Terraform used the selected providers to generate the following execution plan. Resource actions are
@@ -229,6 +223,7 @@ spotify_playlist.playlist: Creating...
 spotify_playlist.playlist: Creation complete after 1s [id=40bGNifvqzwjO8gHDvhbB3]
 
 Apply complete! Resources: 1 added, 0 changed, 0 destroyed.
+```
 
 Outputs:
 
