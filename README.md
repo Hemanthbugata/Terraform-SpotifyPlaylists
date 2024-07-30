@@ -157,6 +157,7 @@ Initializing provider plugins...
 - Finding conradludgate/spotify versions matching "~> 0.1.5"...
 - Installing conradludgate/spotify v0.1.5...
 - Installed conradludgate/spotify v0.1.5 (self-signed, key ID B4E4E68AFAC5D89C)
+```
 
 Partner and community providers are signed by their developers.
 If you'd like to know more about provider signing, you can read about it here:
@@ -179,10 +180,9 @@ commands will detect it and remind you to do so if necessary.
 
 Create the playlist
 Now you are ready to create your playlist. Apply your Terraform configuration. Terraform will show you the changes it plans to make and prompt for your approval.
-```
 
 ```bash
-$ terraform apply
+$ terraform apply -auto-approve
 
 Terraform used the selected providers to generate the following execution plan. Resource actions are
 indicated with the following symbols:
@@ -205,29 +205,20 @@ Terraform will perform the following actions:
     }
 
 Plan: 1 to add, 0 to change, 0 to destroy.
-
+```
 Changes to Outputs:
   + playlist_url = (known after apply)
 
-Do you want to perform these actions?
-  Terraform will perform the actions described above.
-  Only 'yes' will be accepted to approve.
-
-  Enter a value:
-
-Confirm the apply with a yes, and Terraform will create your playlist.
-
-  Enter a value: yes
 
 spotify_playlist.playlist: Creating...
 spotify_playlist.playlist: Creation complete after 1s [id=40bGNifvqzwjO8gHDvhbB3]
 
 Apply complete! Resources: 1 added, 0 changed, 0 destroyed.
-```
+
 
 Outputs:
 
-playlist_url = "https://open.spotify.com/playlist/40bGNifvqzwjO8gHDvhbB3"
+playlist_url = "https://open.spotify.com/playlist/id"
 
 Listen to your playlist
 Open the playlist URL returned in the Terraform output and enjoy your playlist!
