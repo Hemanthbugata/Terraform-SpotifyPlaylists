@@ -1,12 +1,5 @@
-Create a Spotify playlist with Terraform
-15min
-|
-Terraform
-Terraform
-Video
-Video
+<h1>Create a Spotify playlist with Terraform</h1>
 
-Reference this often? Create an account to bookmark tutorials.
 
 Terraform manages infrastructure on cloud computing providers such as AWS, Azure, and GCP. But, it can also manage resources in hundreds of other services, including the music service Spotify.
 
